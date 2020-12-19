@@ -15,6 +15,7 @@ stages:
 
 before_script:
   - pip install ue4-docker
+  - ue4-docker setup
 
 build:
   stage: build
