@@ -21,9 +21,9 @@ build:
   tags: [UE4DockerBuilder]
 
   script:
-    - "echo Registry: $CI_REGISTRY"
+    - "echo Building ue4-full and ue4-minimal for $ENGINE_VERSION"
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - ue4-docker build --no-engine --pull-prerequisites --exclude debug --exclude templates --monitor
+    - ue4-docker build $ENGINE_VERSION --no-engine --pull-prerequisites --exclude debug --exclude templates --monitor
 
 push:
   stage: push
