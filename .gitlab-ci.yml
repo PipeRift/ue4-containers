@@ -1,0 +1,40 @@
+
+variables:
+  ENGINE_VERSION: 4.25.4
+  UE4DOCKER_TAG_NAMESPACE: $CI_REGISTRY/piperift
+  # UE4DOCKER_USERNAME: Github username with access to ue4. Defined somewhere else
+  # UE4DOCKER_PASSWORD: Github token. Defined somewhere else.
+
+  UE4_MINIMAL_IMAGE: $CI_REGISTRY/piperift/ue4-minimal
+  UE4_FULL_IMAGE: $CI_REGISTRY/piperift/ue4-full
+
+stages:
+  - build
+  - push
+
+before_script:
+  - pip install ue4-docker
+
+build:
+  stage: build
+
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - ue4-docker build --no-engine --pull-prerequisites --exclude debug --exclude templates --monitor
+
+push:
+  stage: push
+  script:
+    - docker push $UE4_MINIMAL_IMAGE:$ENGINE_VERSION
+    - docker push $UE4_FULL_IMAGE:$ENGINE_VERSION
+
+push_latest:
+  stage: push
+  rules:
+    - if: '$CI_BUILD_REF_NAME == "main"'
+  script:
+    - docker push $UE4_MINIMAL_IMAGE:latest
+    - docker push $UE4_FULL_IMAGE:latest
+
+after_script:
+  - ue4-docker clean --prune
