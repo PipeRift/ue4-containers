@@ -5,8 +5,8 @@ variables:
   # UE4DOCKER_USERNAME: Github username with access to ue4. Defined somewhere else
   # UE4DOCKER_PASSWORD: Github token. Defined somewhere else.
 
-  UE4_MINIMAL_IMAGE: $CI_REGISTRY/piperift/ue4-minimal
-  UE4_FULL_IMAGE: $CI_REGISTRY/piperift/ue4-full
+  UE4_MINIMAL_IMAGE: $UE4DOCKER_TAG_NAMESPACE/ue4-minimal
+  UE4_FULL_IMAGE: $UE4DOCKER_TAG_NAMESPACE/ue4-full
 
 stages:
   - build
