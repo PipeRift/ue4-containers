@@ -8,17 +8,17 @@ variables:
   UE4_MINIMAL_IMAGE: $UE4DOCKER_TAG_NAMESPACE/ue4-minimal
   UE4_FULL_IMAGE: $UE4DOCKER_TAG_NAMESPACE/ue4-full
 
-tags: [UE4DockerBuilder]
-
 stages:
   - build
   - push
+
 
 before_script:
   - pip install ue4-docker
 
 build:
   stage: build
+  tags: [UE4DockerBuilder]
 
   script:
     - echo 'Registry: $CI_REGISTRY'
@@ -27,12 +27,14 @@ build:
 
 push:
   stage: push
+  tags: [UE4DockerBuilder]
   script:
     - docker push $UE4_MINIMAL_IMAGE:$ENGINE_VERSION
     - docker push $UE4_FULL_IMAGE:$ENGINE_VERSION
 
 push_latest:
   stage: push
+  tags: [UE4DockerBuilder]
   rules:
     - if: '$CI_BUILD_REF_NAME == "main"'
   script:
