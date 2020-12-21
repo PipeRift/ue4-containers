@@ -46,4 +46,5 @@ push_latest:
     - docker push ${UE4_FULL_IMAGE}:latest
 
 after_script:
+  - docker container prune -f
   - ue4-docker clean --prune
