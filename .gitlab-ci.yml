@@ -33,11 +33,10 @@ build:
 push_latest:
   stage: push
   tags: [ue4-image-builder]
-  only:
-    - branches
 
   rules:
-    - if: '$CI_BUILD_REF_NAME == "main"'
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      when: on_success
   script:
     - docker pull $UE4_MINIMAL_IMAGE:$ENGINE_VERSION
     - docker pull $UE4_FULL_IMAGE:$ENGINE_VERSION
