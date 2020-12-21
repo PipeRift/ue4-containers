@@ -1,6 +1,6 @@
 
 variables:
-  ENGINE_VERSION: 4.25.4
+  ENGINE_VERSION: 4.26.0
   UE4DOCKER_TAG_NAMESPACE: $CI_REGISTRY/piperift
   # UE4DOCKER_USERNAME: Github username with access to ue4. Defined somewhere else
   # UE4DOCKER_PASSWORD: Github token. Defined somewhere else.
