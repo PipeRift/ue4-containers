@@ -12,33 +12,37 @@ stages:
   - build
   - push
 
-
 before_script:
   - pip install ue4-docker
   - ue4-docker setup
+  - ue4-docker clean --prune
 
 build:
   stage: build
-  tags: [UE4DockerBuilder]
+  tags: [ue4-image-builder]
+  only:
+    - branches
 
   script:
     - "echo Building ue4-full and ue4-minimal for $ENGINE_VERSION"
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - ue4-docker build $ENGINE_VERSION --no-engine --pull-prerequisites --exclude debug --exclude templates --monitor
-
-push:
-  stage: push
-  tags: [UE4DockerBuilder]
-  script:
     - docker push $UE4_MINIMAL_IMAGE:$ENGINE_VERSION
     - docker push $UE4_FULL_IMAGE:$ENGINE_VERSION
 
 push_latest:
   stage: push
-  tags: [UE4DockerBuilder]
+  tags: [ue4-image-builder]
+  only:
+    - branches
+
   rules:
     - if: '$CI_BUILD_REF_NAME == "main"'
   script:
+    - docker pull $UE4_MINIMAL_IMAGE:$ENGINE_VERSION
+    - docker pull $UE4_FULL_IMAGE:$ENGINE_VERSION
+    - docker image tag $UE4_MINIMAL_IMAGE:$ENGINE_VERSION $UE4_MINIMAL_IMAGE:latest
+    - docker image tag $UE4_FULL_IMAGE:$ENGINE_VERSION $UE4_FULL_IMAGE:latest
     - docker push $UE4_MINIMAL_IMAGE:latest
     - docker push $UE4_FULL_IMAGE:latest
 
